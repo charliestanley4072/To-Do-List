@@ -1,0 +1,178 @@
+body {
+	margin: 0;
+	background-color: #F7E5AD;
+	font-family: sans-serif;
+}
+
+main {
+	padding: 0 10px 40px;
+}
+
+/* Title + lines */
+.title {
+	width: 100%;
+	text-align: center;
+	padding: 25px 0;
+	font-size: 3rem;
+	margin-top: 30px;
+	font-weight: bold;
+	color: white;
+	position: relative;
+}
+
+/* TOP LINES */
+.title::before,
+.title::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	height: 3px;
+	background: white;
+	border-radius: 2px;
+}
+
+/* Top line 1 (longer) */
+.title::before {
+	left: 0;
+	width: 90%;
+}
+
+/* Top line 2 (shorter) */
+.title::after {
+	left: 0;
+	width: 85%;
+	top: 7px;
+}
+
+/* BOTTOM LINES */
+.title span::before,
+.title span::after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	height: 3px;
+	background: white;
+	border-radius: 2px;
+}
+
+/* Bottom line 1 (longer) */
+.title span::before {
+	right: 0;
+	width: 90%;
+}
+
+/* Bottom line 2 (shorter) */
+.title span::after {
+	right: 0;
+	width: 85%;
+	bottom: 7px;
+}
+
+/* Big rectangle box */
+.rounded-box {
+	width: 80vw;
+	min-height: 60vh;
+	background-color: #F0D26C;
+	border-radius: 25px;
+	box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+	padding: 20px;
+	color: #5a4a1f;
+	font-size: 1.5rem;
+	margin: 40px auto 0 auto;
+	box-sizing: border-box;
+}
+
+/* Nav */
+.nav {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 15px;
+}
+
+.nav a {
+	text-decoration: none;
+	background: #f9e8a6;
+	color: #5a4a1f;
+	padding: 8px 14px;
+	border-radius: 999px;
+	font-size: 0.9rem;
+}
+
+/* Tasks */
+#task-list,
+#completed-list,
+#deleted-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.task {
+	background: #F0D26C;
+	padding: 12px 15px;
+	border-radius: 12px;
+	margin-bottom: 12px;
+	font-size: 1.2rem;
+	color: #5a4a1f;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+/* Editable preset */
+.editable {
+	flex: 1;
+	min-height: 40px;
+	line-height: 1.4;
+	cursor: text;
+	display: flex;
+	align-items: center;
+	padding: 12px 0;
+}
+
+.editable:focus {
+	outline: none;
+}
+
+.editable:empty::before {
+	content: "Type here...";
+	color: #bfae7a;
+	opacity: 0.7;
+	pointer-events: none;
+}
+
+/* Flag circle */
+.flag {
+	width: 20px;
+	height: 20px;
+	border: 3px solid #c28a00;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+/* Icons */
+.icon-btn {
+	cursor: pointer;
+	font-size: 1.1rem;
+}
+
+.icon-right {
+	margin-left: auto;
+}
+
+/* Completed style */
+.completed-text {
+	text-decoration: line-through;
+	opacity: 0.6;
+}
+
+/* Small buttons on secondary pages */
+.secondary-btn {
+	background: #f9e8a6;
+	border-radius: 999px;
+	padding: 4px 10px;
+	font-size: 0.8rem;
+	margin-left: 8px;
+	cursor: pointer;
+	border: none;
+}
