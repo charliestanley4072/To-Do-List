@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completed</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main>
+    <div class="title">
+        Completed
+        <span></span>
+    </div>
+
+    <div class="rounded-box">
+        <nav class="nav">
+            <a href="index.html">To-Do List</a>
+            <a href="deleted.html">Recently Deleted</a>
+        </nav>
+
+        <div id="todo-app">
+            <ul id="task-list"></ul>
+        </div>
+    </div>
+</main>
+
+<script>
+const listElement = document.getElementById("task-list");
+
+// 1. Style list container so bullets have room to breathe
+listElement.style.listStyleType = "disc"; // add round bullet point
+listElement.style.paddingLeft = "20px";  // shift text right so bullets aren't hidden
+
+// 2. Grab data from memory
+const savedData = localStorage.getItem("myTasks");
+
+if (savedData) { //checks if there is saved data
+    const tasks = JSON.parse(savedData); //sets tasks = savedData
+    
+    tasks.forEach(taskText => { //loops through each task
+        const li = document.createElement("li"); //creates list item
+        li.textContent = taskText; //pastes context to item
+        li.style.marginBottom = "8px"; //adds margin to bottom
+        listElement.appendChild(li); //adds list item to list
+    });
+}
+</script>
+</body>
+</html>
