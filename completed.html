@@ -8,43 +8,37 @@
 </head>
 <body>
 <main>
-    <div class="title">
-        Completed
-        <span></span>
-    </div>
+    <div class="title">Completed<span></span></div>
 
-    <div class="rounded-box">
-        <nav class="nav">
-            <a href="index.html">To-Do List</a>
-            <a href="deleted.html">Recently Deleted</a>
-        </nav>
+	<div class="rounded-box">
+		<button class="clear-btn" onclick="if(confirm('Delete all?')){localStorage.removeItem('myTasks');location.reload();}">
+			Delete All
+		</button>
 
-        <div id="todo-app">
-            <ul id="task-list"></ul>
-        </div>
-    </div>
+		<nav class="nav">
+			<a href="index.html">To-Do List</a>
+			<a href="deleted.html">Recently Deleted</a>
+		</nav>
+
+		<div id="todo-app">
+			<ul id="task-list" class="completed-view"></ul>
+		</div>
+	</div>
 </main>
 
 <script>
-const listElement = document.getElementById("task-list");
-
-// 1. Style list container so bullets have room to breathe
-listElement.style.listStyleType = "disc"; // add round bullet point
-listElement.style.paddingLeft = "20px";  // shift text right so bullets aren't hidden
-
-// 2. Grab data from memory
-const savedData = localStorage.getItem("myTasks");
-
-if (savedData) { //checks if there is saved data
-    const tasks = JSON.parse(savedData); //sets tasks = savedData
+    const listElement = document.getElementById("task-list");
+    const MS_PER_72_HOURS = 259200000;
     
-    tasks.forEach(taskText => { //loops through each task
-        const li = document.createElement("li"); //creates list item
-        li.textContent = taskText; //pastes context to item
-        li.style.marginBottom = "8px"; //adds margin to bottom
-        listElement.appendChild(li); //adds list item to list
-    });
-}
+    // 1. Get and Filter
+    let tasks = JSON.parse(localStorage.getItem("myTasks") || "[]");
+    tasks = tasks.filter(t => (Date.now() - t.time) < MS_PER_72_HOURS);
+
+    // 2. Sync LocalStorage (removes expired items from memory)
+    localStorage.setItem("myTasks", JSON.stringify(tasks));
+
+    // 3. Render (One-liner)
+    listElement.innerHTML = tasks.map(t => `<li>▪ ${t.text}</li>`).join('');
 </script>
 </body>
 </html>
