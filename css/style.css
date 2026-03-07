@@ -70,16 +70,17 @@ main {
 
 /* Big rectangle box */
 .rounded-box {
-	width: 80vw;
-	min-height: 60vh;
-	background-color: #F0D26C;
-	border-radius: 25px;
-	box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-	padding: 20px;
-	color: #5a4a1f;
-	font-size: 1.5rem;
-	margin: 40px auto 0 auto;
-	box-sizing: border-box;
+    position: relative;
+    width: 80vw;
+    min-height: 60vh;
+    background-color: #F0D26C;
+    border-radius: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    padding: 20px;
+    color: #5a4a1f;
+    font-size: 1.5rem;
+    margin: 40px auto 0 auto;
+    box-sizing: border-box;
 }
 
 /* Nav */
@@ -108,26 +109,26 @@ main {
 }
 
 .task {
-	background: #F0D26C;
-	padding: 12px 15px;
-	border-radius: 12px;
-	margin-bottom: 12px;
-	font-size: 1.2rem;
-	color: #5a4a1f;
-	display: flex;
-	align-items: center;
-	gap: 12px;
+    background: #F0D26C;
+    padding: 8px 15px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    font-size: 1.2rem;
+    color: #5a4a1f;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 /* Editable preset */
 .editable {
-	flex: 1;
-	min-height: 40px;
-	line-height: 1.4;
-	cursor: text;
-	display: flex;
-	align-items: center;
-	padding: 12px 0;
+    flex: 1;
+    min-height: 24px;
+    line-height: 1.2;
+    cursor: text;
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
 }
 
 .editable:focus {
@@ -175,4 +176,35 @@ main {
 	margin-left: 8px;
 	cursor: pointer;
 	border: none;
+}
+
+.nav-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.clear-btn {
+    position: absolute; /* Moves it out of the normal layout */
+    top: 20px;          /* Distance from the top of the box */
+    right: 20px;        /* Distance from the right of the box */
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: bold;
+    z-index: 10;        /* Ensures it stays above the list */
+    transition: background 0.2s;
+}
+
+.clear-btn:hover {
+    background: #cc0000;
+}
+
+.nav a:hover {
+	background: #E3D99A
 }
