@@ -1,103 +1,162 @@
-const taskList = document.getElementById("task-list");
-addPreset();
+var taskList = document.getElementById("task-list");
+loadActiveTasks();
 
-function addPreset() {
-    const p = document.createElement("div");
-    p.className = "task";
-    p.style.display = "flex"; // Ensure the row is a flexbox
-    p.style.alignItems = "center";
-    p.style.gap = "10px";
+function saveActiveTasks() {
+    var allTasks = [];
+    var allRows = document.querySelectorAll(".task");
 
-    const flag = document.createElement("div");
-    flag.className = "flag";
-    flag.style.cursor = "pointer";
-    flag.onclick = () => toggleFlag(flag);
-    flag.ondblclick = () => handleDoubleClick(flag);
-
-    const text = document.createElement("div");
-    text.className = "editable";
-    text.contentEditable = true;
-    text.style.flex = "1"; // Glues icons to the right
-    text.innerHTML = "&#8203;";
-
-    text.onkeydown = e => {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            const t = text.textContent.replace("\u200B", "").trim();
-            if (!t) return;
-            const isRed = flag.classList.contains("active");
-            makeReminder(p, t, isRed);
-            addPreset();
+    allRows.forEach(function(row) {
+        var textSpan = row.querySelector("span");
+        
+        if (textSpan) {
+            var taskData = {
+                text: textSpan.textContent,
+                isRed: row.querySelector(".flag").classList.contains("active")
+            };
+            allTasks.push(taskData);
         }
-    };
+    });
 
-    p.append(flag, text);
-    taskList.appendChild(p);
+    var stringData = JSON.stringify(allTasks);
+    localStorage.setItem("activeTasks", stringData);
 }
 
-function makeReminder(p, t, isRed) {
-    p.innerHTML = "";
-
-    const flag = document.createElement("div");
-    flag.className = "flag";
-    flag.style.cursor = "pointer";
-    flag.onclick = () => toggleFlag(flag);
-    flag.ondblclick = () => handleDoubleClick(flag);
+function loadActiveTasks() {
+    var savedString = localStorage.getItem("activeTasks");
     
-    if (isRed) {
+    if (savedString) {
+        var savedTasks = JSON.parse(savedString);
+        taskList.innerHTML = ""; // Clear the screen first
+        
+        savedTasks.forEach(function(item) {
+            var newBox = document.createElement("div");
+            newBox.className = "task";
+            makeReminder(newBox, item.text, item.isRed);
+            taskList.appendChild(newBox);
+        });
+    }
+    addPreset();
+}
+
+
+function addPreset() {
+    var row = document.createElement("div");
+    row.className = "task";
+
+    var flag = document.createElement("div");
+    flag.className = "flag";
+    flag.onclick = function() {
+        toggleFlag(flag);
+        saveActiveTasks();
+    };
+    flag.ondblclick = function() {
+        doubleClick(flag);
+    };
+
+    var typingArea = document.createElement("div");
+    typingArea.className = "editable";
+    typingArea.contentEditable = true;
+    typingArea.innerHTML = "&#8203;"; // Invisible space to keep it open
+
+    typingArea.onkeydown = function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault(); // Stop it from making a real new line
+            
+            var userInput = typingArea.textContent.trim();
+            
+            if (userInput !== "") {
+                // Change the "typing" box into a "saved" box
+                makeReminder(row, userInput, flag.classList.contains("active"));
+                saveActiveTasks();
+                addPreset(); // Make a brand new empty row
+            }
+        }
+    };
+    row.appendChild(flag);
+    row.appendChild(typingArea);
+    taskList.appendChild(row);
+}
+
+function makeReminder(row, message, isRed) {
+    row.innerHTML = ""; //
+
+    var flag = document.createElement("div");
+    flag.className = "flag";
+    
+    if (isRed === true) {
         flag.classList.add("active");
         flag.style.background = "#ff4d4d";
     }
-    
-    const span = document.createElement("span");
-    span.style.flex = "1"; // This is the "glue" that pushes icons right
-    span.textContent = t;
 
-    const edit = document.createElement("span");
-    edit.textContent = "✏️";
-    edit.style.cursor = "pointer";
-    edit.onclick = () => {
-        const input = document.createElement("input");
-        input.value = span.textContent;
-        p.replaceChild(input, span);
-        input.onblur = () => {
-            span.textContent = input.value.trim() || t;
-            p.replaceChild(span, input);
+    flag.onclick = function() {
+        toggleFlag(flag);
+        saveActiveTasks();
+    };
+    flag.ondblclick = function() {
+        doubleClick(flag);
+    };
+
+    var textLabel = document.createElement("span");
+    textLabel.textContent = message;
+    textLabel.style.flex = "1";
+
+    var editBtn = document.createElement("span");
+    editBtn.textContent = "✏️";
+    editBtn.className = "secondary-btn";
+    editBtn.onclick = function() {
+        var inputField = document.createElement("input");
+        inputField.value = textLabel.textContent;
+        row.replaceChild(inputField, textLabel);
+        
+        inputField.onblur = function() {
+            textLabel.textContent = inputField.value;
+            row.replaceChild(textLabel, inputField);
+            saveActiveTasks();
         };
-        input.focus();
+        inputField.focus();
     };
 
-    const del = document.createElement("span");
-    del.textContent = "🗑";
-    del.style.cursor = "pointer";
-    del.onclick = () => {
-        p.remove();
-        if (taskList.children.length === 0) addPreset();
+    var deleteBtn = document.createElement("span");
+    deleteBtn.textContent = "🗑";
+    deleteBtn.className = "secondary-btn";
+    deleteBtn.onclick = function() {
+        row.remove();
+        saveActiveTasks();
     };
 
-    p.append(flag, span, edit, del);
+    row.appendChild(flag);
+    row.appendChild(textLabel);
+    row.appendChild(editBtn);
+    row.appendChild(deleteBtn);
 }
 
-function toggleFlag(flag) {
-    if (flag.classList.contains("done")) return; //ensure user doesn't single click after double clicking - ends function if classList contains 'done'
-    flag.classList.toggle("active");
-    flag.style.background = flag.classList.contains("active") ? "#ff4d4d" : "transparent";
+function toggleFlag(circle) {
+    circle.classList.toggle("active");
+    if (circle.classList.contains("active")) {
+        circle.style.background = "#ff4d4d";
+    } else {
+        circle.style.background = "transparent";
+    }
 }
 
-function handleDoubleClick(flag) {
-    flag.classList.add("done");
-    flag.style.background = "#2ecc71"; //green
+function doubleClick(circle) {
+    circle.classList.add("done");
+    circle.style.background = "#2ecc71"; // Turn Green
 
-    const textToSave = flag.nextElementSibling.textContent; //grabs content from element next to flag (the reminder itself) and sets to textToSave
-    let savedList = JSON.parse(localStorage.getItem("myTasks")) || []; //sets savedList = already existing list in local storage OR a new one
-    savedList.push(textToSave); //adds new task to end of list
-    localStorage.setItem("myTasks", JSON.stringify(savedList)); //turns list into one long string so browser can store it
+    var taskText = circle.nextElementSibling.textContent;
+    
+    // Save to the "Completed" storage
+    var completedList = JSON.parse(localStorage.getItem("myTasks") || "[]");
+    completedList.push({ text: taskText, time: Date.now() });
+    localStorage.setItem("myTasks", JSON.stringify(completedList));
 
-    const parent = flag.closest(".task"); //sets parent = whole task
-    parent.style.transition = "opacity 1s"; //1s transition
-    parent.style.opacity = "0"; //sets invisible
-    setTimeout(() => { //sets timer for 1000ms for fade animation
-        parent.remove(); //removes the reminder from the page
-        if (taskList.children.length === 0) addPreset(); //if there are no more reminders, another is added
-    }, 1000);
+    // Fade away animation
+    var wholeRow = circle.parentElement;
+    wholeRow.style.transition = "opacity 0.5s";
+    wholeRow.style.opacity = "0";
+    
+    setTimeout(function() {
+        wholeRow.remove();
+        saveActiveTasks();
+    }, 500);
 }
