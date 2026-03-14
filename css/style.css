@@ -1,72 +1,51 @@
+/* --- Global & Layout --- */
 body {
-	margin: 0;
-	background-color: #F7E5AD;
-	font-family: sans-serif;
+    margin: 0;
+    background-color: #F7E5AD;
+    font-family: sans-serif;
+    position: relative;
+    min-height: 100vh;
 }
 
-main {
-	padding: 0 10px 40px;
-}
+main { padding: 0 10px 40px; }
+
+/* Decorative Elements: Screws & Icons */
+.screw, .title img { position: absolute; }
+.screw { width: 40px; height: 35px; z-index: -1; }
+.title img { width: 45px; height: auto; top: 50%; transform: translateY(-50%); }
+
+/* Corner Pins */
+.top-left     { top: 15px; left: 15px; }
+.top-right    { top: 15px; right: 15px; }
+.bottom-left  { bottom: 15px; left: 15px; }
+.bottom-right { bottom: 15px; right: 15px; }
 
 /* Title + lines */
 .title {
-	width: 100%;
-	text-align: center;
-	padding: 25px 0;
-	font-size: 3rem;
-	margin-top: 30px;
-	font-weight: bold;
-	color: white;
-	position: relative;
+    width: 100%;
+    text-align: center;
+    padding: 25px 0;
+    font-size: 3rem;
+    margin-top: 30px;
+    font-weight: bold;
+    color: white;
+    position: relative;
 }
 
-/* TOP LINES */
-.title::before,
-.title::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	height: 3px;
-	background: white;
-	border-radius: 2px;
+/* TOP & BOTTOM LINES Shared */
+.title::before, .title::after, .title span::before, .title span::after {
+    content: "";
+    position: absolute;
+    height: 3px;
+    background: white;
+    border-radius: 2px;
 }
 
-/* Top line 1 (longer) */
-.title::before {
-	left: 0;
-	width: 90%;
-}
-
-/* Top line 2 (shorter) */
-.title::after {
-	left: 0;
-	width: 85%;
-	top: 7px;
-}
-
-/* BOTTOM LINES */
-.title span::before,
-.title span::after {
-	content: "";
-	position: absolute;
-	bottom: 0;
-	height: 3px;
-	background: white;
-	border-radius: 2px;
-}
-
-/* Bottom line 1 (longer) */
-.title span::before {
-	right: 0;
-	width: 90%;
-}
-
-/* Bottom line 2 (shorter) */
-.title span::after {
-	right: 0;
-	width: 85%;
-	bottom: 7px;
-}
+/* Specific Line Placements */
+.title::before { left: 0; width: 90%; top: 0; }
+.title::after { left: 0; width: 85%; top: 7px; }
+.title span::before { right: 0; width: 90%; bottom: 0; }
+.title span::after { right: 0; width: 85%; bottom: 7px; }
 
 /* Big rectangle box */
 .rounded-box {
@@ -79,34 +58,31 @@ main {
     padding: 20px;
     color: #5a4a1f;
     font-size: 1.5rem;
-    margin: 40px auto 0 auto;
+    margin: 40px auto 0;
     box-sizing: border-box;
 }
 
-/* Nav */
-.nav {
-	display: flex;
-	gap: 10px;
-	margin-bottom: 15px;
+/* Nav & Buttons Shared Style */
+.nav1 a, .nav2 button {
+    text-decoration: none;
+    background: #f9e8a6;
+    color: #5a4a1f;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
 }
 
-.nav a {
-	text-decoration: none;
-	background: #f9e8a6;
-	color: #5a4a1f;
-	padding: 8px 14px;
-	border-radius: 999px;
-	font-size: 0.9rem;
-}
+.nav1 { display: flex; gap: 10px; margin-bottom: 15px; }
+.nav1 a:hover, .nav2 button:hover { background: #E3D99A; }
+
+.nav-container { position: relative; }
+.nav2 { position: absolute; top: 0; right: 0; display: flex; gap: 10px; }
 
 /* Tasks */
-#task-list,
-#completed-list,
-#deleted-list {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
+#task-list, #completed-list, #deleted-list { list-style: none; padding: 0; margin: 0; }
 
 .task {
     background: #F0D26C;
@@ -130,65 +106,38 @@ main {
     align-items: center;
     padding: 5px 0;
 }
-
-.editable:focus {
-	outline: none;
-}
-
+.editable:focus { outline: none; }
 .editable:empty::before {
-	content: "Type here...";
-	color: #bfae7a;
-	opacity: 0.7;
-	pointer-events: none;
+    content: "Type here...";
+    color: #bfae7a;
+    opacity: 0.7;
+    pointer-events: none;
 }
 
 /* Flag circle */
 .flag {
-	width: 20px;
-	height: 20px;
-	border: 3px solid #c28a00;
-	border-radius: 50%;
-	cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #c28a00;
+    border-radius: 50%;
+    cursor: pointer;
 }
 
-/* Icons */
-.icon-btn {
-	cursor: pointer;
-	font-size: 1.1rem;
-}
-
-.icon-right {
-	margin-left: auto;
-}
-
-/* Completed style */
-.completed-text {
-	text-decoration: line-through;
-	opacity: 0.6;
-}
-
-/* Small buttons on secondary pages */
+/* Secondary Actions */
 .secondary-btn {
-	background: #f9e8a6;
-	border-radius: 999px;
-	padding: 4px 10px;
-	font-size: 0.8rem;
-	margin-left: 8px;
-	cursor: pointer;
-	border: none;
-}
-
-.nav-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+    background: #f9e8a6;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    margin-left: 8px;
+    cursor: pointer;
+    border: none;
 }
 
 .clear-btn {
-    position: absolute; /* Moves it out of the normal layout */
-    top: 20px;          /* Distance from the top of the box */
-    right: 20px;        /* Distance from the right of the box */
+    position: absolute;
+    top: 20px;
+    right: 20px;
     background: #ff4d4d;
     color: white;
     border: none;
@@ -197,14 +146,42 @@ main {
     cursor: pointer;
     font-size: 0.8rem;
     font-weight: bold;
-    z-index: 10;        /* Ensures it stays above the list */
+    z-index: 10;
     transition: background 0.2s;
 }
+.clear-btn:hover { background: #cc0000; }
 
-.clear-btn:hover {
-    background: #cc0000;
+.icon-left { left: 20px; }
+.icon-right { right: 20px; }
+
+/* Container Grid */
+.post-it-mode {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
 }
 
-.nav a:hover {
-	background: #E3D99A
+/* The Square */
+.post-it-note {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.1);
 }
+
+/* Flag at Top-Left */
+.post-it-note .flag { position: absolute; top: 12px; left: 12px; }
+
+/* Strictly Hide Edit/Delete buttons in Post-it view */
+.post-it-note .secondary-btn, .post-it-note .icon-btn { display: none !important; }
+
+/* Neon Colors */
+.neon-yellow { background-color: #faff00 !important; color: #333; }
+.neon-pink   { background-color: #ff00ff !important; color: #fff; }
+.neon-green  { background-color: #39ff14 !important; color: #333; }
+.neon-blue   { background-color: #00f2ff !important; color: #333; }
