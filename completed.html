@@ -3,19 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Completed</title>
+    <title>To-Do List - Completed</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <main>
-    <div class="title">Completed<span></span></div>
+	<div class="title">
+		<img src="images/tick.png" class="icon-left">
+		<span class="title-text">Completed</span>
+		<img src="images/tick.png" class="icon-right">
+	</div>
+	<span></span>
 
 	<div class="rounded-box">
 		<button class="clear-btn" onclick="if(confirm('Delete all?')){localStorage.removeItem('myTasks');location.reload();}">
 			Delete All
 		</button>
 
-		<nav class="nav">
+		<nav class="nav1">
 			<a href="index.html">To-Do List</a>
 			<a href="deleted.html">Recently Deleted</a>
 		</nav>
@@ -41,4 +46,3 @@
     listElement.innerHTML = tasks.map(t => `<li>▪ ${t.text}</li>`).join('');
 </script>
 </body>
-</html>
