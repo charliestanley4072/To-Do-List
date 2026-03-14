@@ -3,21 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>To-Do List</title>
+  <title>To-Do List - Main</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+	<img src="images/screw.png" class="screw top-left">
+    <img src="images/screw.png" class="screw top-right">
+    <img src="images/screw.png" class="screw bottom-left">
+    <img src="images/screw.png" class="screw bottom-right">
+	
 	<main>
 		<div class="title">
-		My To-Do List
-		<span></span>
+			My To-Do List
+			<span></span>
 		</div>
 
 		<div class="rounded-box">
 			<div class="nav-container">
-				<nav class="nav">
+				<nav class="nav1">
 					<a href="completed.html">Completed</a>
 					<a href="deleted.html">Recently Deleted</a>
+				</nav>
+				<nav class="nav2">
+					<button id="view-toggle-btn">Post-it View</button>
+					<button>Priority View</button>
 				</nav>
 			</div>
 
