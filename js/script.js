@@ -23,6 +23,7 @@ function saveActiveTasks() {
 
     var stringData = JSON.stringify(allTasks);
     localStorage.setItem("activeTasks", stringData);
+	updateHelpVisibility();
 }
 
 function loadActiveTasks() {
@@ -44,6 +45,7 @@ function loadActiveTasks() {
     if (!isPostIt) {
         addPreset();
     }
+	updateHelpVisibility();
 }
 
 function addPreset() {
@@ -83,6 +85,7 @@ function addPreset() {
     row.appendChild(flag);
     row.appendChild(typingArea);
     taskList.appendChild(row);
+	typingArea.focus();
 }
 
 function makeReminder(row, message, isRed) {
@@ -165,6 +168,7 @@ function doubleClick(circle) {
     
     setTimeout(function() {
         wholeRow.remove();
+		updateHelpVisibility();
         saveActiveTasks();
     }, 500);
 }
@@ -200,8 +204,26 @@ function togglePostItView() {
             note.classList.add("task");
         });
 
-        addPreset(); //Add back typing area
     }
     saveActiveTasks();
 }
 document.getElementById("view-toggle-btn").onclick = togglePostItView;
+
+function updateHelpVisibility() {
+    const helpCloud = document.getElementById('start-help');
+
+    const allTasks = document.querySelectorAll('.task, .post-it-note');
+    let hasSavedTask = false;
+    allTasks.forEach(task => {
+        const textSpan = task.querySelector('span');
+        if (textSpan && textSpan.textContent.trim() !== "") {
+            hasSavedTask = true;
+        }
+    });
+
+    if (hasSavedTask) {
+        helpCloud.classList.add('hide-cloud');
+    } else {
+        helpCloud.classList.remove('hide-cloud');
+    }
+}
