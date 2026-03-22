@@ -174,10 +174,7 @@ main { padding: 0 10px 40px; }
     box-shadow: 4px 4px 10px rgba(0,0,0,0.1);
 }
 
-/* Flag at Top-Left */
 .post-it-note .flag { position: absolute; top: 12px; left: 12px; }
-
-/* Strictly Hide Edit/Delete buttons in Post-it view */
 .post-it-note .secondary-btn, .post-it-note .icon-btn { display: none !important; }
 
 /* Neon Colors */
@@ -185,3 +182,57 @@ main { padding: 0 10px 40px; }
 .neon-pink   { background-color: #ff00ff !important; color: #fff; }
 .neon-green  { background-color: #39ff14 !important; color: #333; }
 .neon-blue   { background-color: #00f2ff !important; color: #333; }
+
+#start-help {
+    position: absolute;
+    top: 36px;
+    right: 100%;
+    width: clamp(100px, 10vw, 150px);
+    margin-right: 25px; 
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    /* Box Dimensions */
+    width: 140px;
+    margin-right: 40px; 
+    padding: 25px 15px;
+    /*Cloud Body */
+    background: #fff;
+    font-weight: bold;
+    text-align: center;
+    font-size: 0.9rem;
+    border-radius: 50%; /*oval shape*/
+    box-shadow: 
+        -25px -15px 0 -5px #fff,
+        25px -15px 0 -5px #fff,
+        -20px 15px 0 -8px #fff,
+        20px 15px 0 -8px #fff,
+        -25px -15px 0 -2px #5a4a1f, 
+        25px -15px 0 -2px #5a4a1f, 
+        -20px 15px 0 -5px #5a4a1f, 
+        20px 15px 0 -5px #5a4a1f;
+    box-sizing: border-box;
+    pointer-events: none;
+    z-index: 10;
+}
+
+
+.flag:hover {
+    transform: scale(1.25);
+    filter: brightness(1.1);
+    cursor: pointer;
+    z-index: 10;
+}
+
+.flag {
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;
+    transform-origin: center;
+    display: inline-block; 
+}
+
+.hide-cloud {
+    background: transparent !important;
+    box-shadow: none !important;
+    color: transparent !important;
+    border-color: transparent !important;
+}
