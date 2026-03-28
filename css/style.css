@@ -63,17 +63,17 @@ main { padding: 0 10px 40px; }
 }
 
 /* Nav & Buttons Shared Style */
-.nav1 a, .nav2 button {
+.nav1 a, .nav2 button, .secondary-btn {
     text-decoration: none;
     background: #f9e8a6;
     color: #5a4a1f;
-    padding: 8px 14px;
     border-radius: 999px;
-    font-size: 0.9rem;
     border: none;
     cursor: pointer;
     font-family: inherit;
 }
+
+.nav1 a, .nav2 button { padding: 8px 14px; font-size: 0.9rem; }
 
 .nav1 { display: flex; gap: 10px; margin-bottom: 15px; }
 .nav1 a:hover, .nav2 button:hover { background: #E3D99A; }
@@ -84,27 +84,30 @@ main { padding: 0 10px 40px; }
 /* Tasks */
 #task-list, #completed-list, #deleted-list { list-style: none; padding: 0; margin: 0; }
 
+/* Updated Task Container */
 .task {
     background: #F0D26C;
-    padding: 8px 15px;
+    padding: 10px 15px; /* Slightly more padding for multi-line comfort */
     border-radius: 12px;
     margin-bottom: 8px;
     font-size: 1.2rem;
     color: #5a4a1f;
     display: flex;
-    align-items: center;
+    align-items: center; /* This keeps the bullet centered vertically even if text grows */
     gap: 12px;
+    word-break: break-word; /* Prevents long single words from breaking layout */
 }
 
-/* Editable preset */
+/* Updated Editable Area */
 .editable {
     flex: 1;
     min-height: 24px;
-    line-height: 1.2;
+    line-height: 1.4; /* Increased slightly for better readability on multiple lines */
     cursor: text;
-    display: flex;
-    align-items: center;
+    /* Removed 'display: flex' and 'align-items' to allow natural text wrapping */
     padding: 5px 0;
+    white-space: pre-wrap;
+    overflow-wrap: break-word; /* Ensures long strings wrap */
 }
 .editable:focus { outline: none; }
 .editable:empty::before {
@@ -121,17 +124,22 @@ main { padding: 0 10px 40px; }
     border: 3px solid #c28a00;
     border-radius: 50%;
     cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;
+    transform-origin: center;
+    display: inline-block; 
+}
+
+.flag:hover {
+    transform: scale(1.25);
+    filter: brightness(1.1);
+    z-index: 10;
 }
 
 /* Secondary Actions */
 .secondary-btn {
-    background: #f9e8a6;
-    border-radius: 999px;
     padding: 4px 10px;
     font-size: 0.8rem;
     margin-left: 8px;
-    cursor: pointer;
-    border: none;
 }
 
 .clear-btn {
@@ -162,6 +170,7 @@ main { padding: 0 10px 40px; }
 }
 
 /* The Square */
+/* The Square */
 .post-it-note {
     aspect-ratio: 1 / 1;
     display: flex;
@@ -172,6 +181,18 @@ main { padding: 0 10px 40px; }
     padding: 20px;
     box-sizing: border-box;
     box-shadow: 4px 4px 10px rgba(0,0,0,0.1);
+    overflow: hidden; /*Cut off reminder if too long*/
+    word-break: break-word;
+}
+
+
+.post-it-note span {
+    display: -webkit-box;
+    -webkit-line-clamp: 6; /* Limits to 6 lines depending on font size */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.2;
+    max-height: 100%;
 }
 
 .post-it-note .flag { position: absolute; top: 12px; left: 12px; }
@@ -187,17 +208,12 @@ main { padding: 0 10px 40px; }
     position: absolute;
     top: 36px;
     right: 100%;
-    width: clamp(100px, 10vw, 150px);
-    margin-right: 25px; 
-    color: black;
-    text-align: center;
-    font-weight: bold;
-    /* Box Dimensions */
     width: 140px;
     margin-right: 40px; 
     padding: 25px 15px;
     /*Cloud Body */
     background: #fff;
+    color: black;
     font-weight: bold;
     text-align: center;
     font-size: 0.9rem;
@@ -216,23 +232,33 @@ main { padding: 0 10px 40px; }
     z-index: 10;
 }
 
-
-.flag:hover {
-    transform: scale(1.25);
-    filter: brightness(1.1);
-    cursor: pointer;
-    z-index: 10;
-}
-
-.flag {
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;
-    transform-origin: center;
-    display: inline-block; 
-}
-
 .hide-cloud {
     background: transparent !important;
     box-shadow: none !important;
     color: transparent !important;
     border-color: transparent !important;
+}
+
+/* While dragging, the original spot looks faint */
+.dragging {
+    opacity: 0.2;
+    background: #d4bc6a !important;
+}
+
+/* Make sure the list behaves as a vertical column in priority mode */
+#task-list.priority-mode {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* This allows the whole row to be the "handle" */
+.priority-mode .task {
+    cursor: move;
+    transition: transform 0.1s ease; /* Makes the "pushing" look smoother */
+}
+
+.drag-handle {
+    margin-right: 10px;
+    color: #8a763a;
 }
