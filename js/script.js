@@ -51,15 +51,18 @@ function addPreset() {
     typingArea.style.color = "black"; // Ensuring text is black
 
     typingArea.onkeydown = (e) => {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            var input = typingArea.textContent.trim();
-            if (input) {
-                makeReminder(row, input, flag.classList.contains("active"));
-                saveActiveTasks();
-                addPreset(); 
-            }
-        }
+	if (e.key === "Enter") {
+		e.preventDefault();
+		// This removes the hidden placeholder character and any extra spaces
+		var input = typingArea.textContent.replace(/\u200B/g, "").trim();
+		
+		// Only make new preset if there is any text typed
+		if (input.length > 0) {
+			makeReminder(row, input, flag.classList.contains("active"));
+			saveActiveTasks();
+			addPreset(); 
+		}
+	}
     };
     row.append(flag, typingArea);
     taskList.appendChild(row);
@@ -88,7 +91,23 @@ function makeReminder(row, message, isRed) {
         if (newText?.trim()) { textLabel.textContent = newText; saveActiveTasks(); }
     });
 
-    var deleteBtn = createBtn("🗑", () => { row.remove(); saveActiveTasks(); });
+
+	var deleteBtn = createBtn("🗑", () => { 
+		// Get existing deleted tasks or empty array
+		var deletedList = JSON.parse(localStorage.getItem("deletedTasks") || "[]");
+		
+		// Add the current task with a timestamp
+		deletedList.push({ text: textLabel.textContent, time: Date.now() });
+		
+		localStorage.setItem("deletedTasks", JSON.stringify(deletedList));
+
+		row.style.transition = "opacity 0.3s";
+		row.style.opacity = "0";
+		setTimeout(() => { 
+			row.remove(); 
+			saveActiveTasks(); 
+		}, 300);
+	});
 
     row.append(flag, textLabel, editBtn, deleteBtn);
 }
