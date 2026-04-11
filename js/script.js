@@ -85,11 +85,19 @@ function makeReminder(row, message, isRed) {
     textLabel.style.flex = "1";
     textLabel.style.color = "black"; // Ensuring text is black
 
-    // List view buttons
-    var editBtn = createBtn("✏️", () => {
-        var newText = prompt("Edit your task:", textLabel.textContent);
-        if (newText?.trim()) { textLabel.textContent = newText; saveActiveTasks(); }
-    });
+	var editBtn = createBtn("✏️", () => {
+		if (textLabel.contentEditable !== "true") {
+			textLabel.contentEditable = "true";
+			textLabel.focus();
+			window.getSelection().selectAllChildren(textLabel);
+			window.getSelection().collapseToEnd();
+		} else {
+			textLabel.blur();
+		}
+	});
+
+	textLabel.onblur = () => { textLabel.contentEditable = "false"; saveActiveTasks(); };
+	textLabel.onkeydown = (e) => { if (e.key === "Enter") { e.preventDefault(); textLabel.blur(); } };
 
 
 	var deleteBtn = createBtn("🗑", () => { 
