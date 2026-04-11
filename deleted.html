@@ -32,28 +32,29 @@
 		</div>
 	</main>
 
-    <script>
+	<script>
         const listElement = document.getElementById("task-list");
         const MS_PER_72_HOURS = 259200000; // Auto-delete after 3 days
         
         // 1. Get and Filter
         let tasks = JSON.parse(localStorage.getItem("deletedTasks") || "[]");
         tasks = tasks.filter(t => (Date.now() - t.time) < MS_PER_72_HOURS);
+        // Removes any reminders that are empty or just spaces
+        tasks = tasks.filter(t => t.text && t.text.trim() !== "");
 
         // 2. Sync LocalStorage
         localStorage.setItem("deletedTasks", JSON.stringify(tasks));
 
         // 3. Render
-        if (tasks.length === 0) {
-            listElement.innerHTML = "<li style='opacity:0.5; list-style:none;'>No recently deleted tasks.</li>";
-        } else {
-            // FIX: Wrapped the bullet in a span to keep it to the left
-            listElement.innerHTML = tasks.map(t => `
-                <li class="task" style="list-style:none;">
-                    <span>▪</span>
-                    <span>${t.text}</span>
-                </li>`).join('');
-        }
+		if (tasks.length === 0) {
+			listElement.innerHTML = "<li style='opacity:0.5; list-style:none; font-size:1.5rem;'>No tasks here.</li>";
+		} else {
+			listElement.innerHTML = tasks.map(t => `
+				<li style="display: flex; align-items: center; margin-bottom: 12px; list-style: none; width: 100%; font-size: 1.5rem; color: #5a4a1f;">
+					<span style="flex-shrink: 0; width: 35px; display: flex; align-items: center; justify-content: center;">▪</span>
+					<span style="flex: 1; word-break: break-word; line-height: 1.2; min-width: 0; display: inline-block;">${t.text}</span>
+				</li>`).join('');
+		}
     </script>
 </body>
 </html>
