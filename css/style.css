@@ -236,10 +236,9 @@ main { padding: 0 10px 40px; }
     gap: 10px;
 }
 
-/* This allows the whole row to be the "handle" */
 .priority-mode .task {
     cursor: move;
-    transition: transform 0.1s ease; /* Makes the "pushing" look smoother */
+    transition: transform 0.1s ease;
 }
 
 .drag-handle {
