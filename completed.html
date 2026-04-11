@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do List - Completed</title>
     <link rel="stylesheet" href="css/style.css">
+	
 </head>
 <body>
 <main>
@@ -32,18 +33,28 @@
 </main>
 
 <script>
-    const listElement = document.getElementById("task-list");
-    const MS_PER_72_HOURS = 259200000;
-    
-    // 1. Get and Filter
-    let tasks = JSON.parse(localStorage.getItem("myTasks") || "[]");
-    tasks = tasks.filter(t => (Date.now() - t.time) < MS_PER_72_HOURS);
+	const listElement = document.getElementById("task-list");
+	const MS_PER_72_HOURS = 259200000; // Auto-delete after 3 days
+	
+	// 1. Get and Filter
+	let tasks = JSON.parse(localStorage.getItem("myTasks") || "[]");
+	tasks = tasks.filter(t => (Date.now() - t.time) < MS_PER_72_HOURS);
+	// Removes any reminders that are empty or just spaces
+	tasks = tasks.filter(t => t.text && t.text.trim() !== "");
 
-    // 2. Sync LocalStorage (removes expired items from memory)
-    localStorage.setItem("myTasks", JSON.stringify(tasks));
+	// 2. Sync LocalStorage
+	localStorage.setItem("myTasks", JSON.stringify(tasks));
 
-    // 3. Render (One-liner)
-    listElement.innerHTML = tasks.map(t => `<li>▪ ${t.text}</li>`).join('');
+	// 3. Render
+	if (tasks.length === 0) {
+		listElement.innerHTML = "<li style='opacity:0.5; list-style:none; font-size:1.5rem;'>No tasks here.</li>";
+	} else {
+		listElement.innerHTML = tasks.map(t => `
+			<li style="display: flex; align-items: center; margin-bottom: 12px; list-style: none; width: 100%; font-size: 1.5rem; color: #5a4a1f;">
+				<span style="flex-shrink: 0; width: 35px; display: flex; align-items: center; justify-content: center;">▪</span>
+				<span style="flex: 1; word-break: break-word; line-height: 1.2; min-width: 0; display: inline-block;">${t.text}</span>
+			</li>`).join('');
+	}
 </script>
 </body>
 </html>
