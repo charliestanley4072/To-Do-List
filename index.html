@@ -13,36 +13,74 @@
     <img src="images/screw.png" class="screw bottom-left">
     <img src="images/screw.png" class="screw bottom-right">
 	
-	<main>
-		<div class="title">
-			<img class="calendar-icon" src="images/calendar.png">
-			<img class="settings-icon" src="images/settings.png">
-			My To-Do List
-			<img class="key-icon" src="images/key.png">
-			<span></span>
-		</div>
-		
-		<div class="rounded-box">
-			<p id="start-help">Start by clicking to the right of this bullet point!</p>
-			<div class="nav-container">
-				<nav class="nav1">
-					<a href="completed.html">Completed</a>
-					<a href="deleted.html">Recently Deleted</a>
-				</nav>
-				<nav class="nav2">
-					<button id="view-toggle-btn">Post-it View</button>
-					<button id="priority-mode-toggle">Priority View</button>
-				</nav>
-			</div>
+<main>
+    <div class="title">
+        <img class="calendar-icon" src="images/calendar.png">
+        
+        <button id="settings-btn" class="icon-btn-wrapper">
+            <img class="settings-icon-img" src="images/settings.png" alt="Settings">
+        </button>
 
-			<div id="todo-app">
-				<ul id="task-list" class="completed-view"></ul>
-			</div>
-		</div>
-	</main>
+        <button id="key-btn" class="key-wrapper">
+            <img class="key-icon-img" src="images/key.png" alt="Key">
+        </button>
 
+        <div id="side-panel" class="side-panel">
+            <button id="close-panel" class="closebtn">&times;</button>
+            <div class="panel-content">
+                <h2><u>Settings</u></h2>
+                <div class="setting-item">
+                    <label id="account-label" class="centered-label">Account</label>
+                </div>
+                <button id="clear-all-data" class="danger-btn">Clear All Data</button>
+            </div>
+        </div>
+
+        My To-Do List
+        <img class="key-icon" src="images/key.png" style="visibility: hidden;">
+        <span></span>
+    </div>
+    
+    <div class="rounded-box">
+        <p id="start-help">Start by clicking to the right of this bullet point!</p>
+        
+        <div class="nav-container">
+            <nav class="nav1">
+                <a href="completed.html">Completed</a>
+                <a href="deleted.html">Recently Deleted</a>
+            </nav>
+            <nav class="nav2">
+                <button id="view-toggle-btn">Post-it View</button>
+                <button id="priority-mode-toggle">Priority View</button>
+            </nav>
+        </div>
+
+        <div id="todo-app">
+            <ul id="task-list"></ul>
+        </div>
+    </div>
+</main>
+
+<div id="panel-overlay" class="panel-overlay"></div>
+
+<div id="account-modal" class="modal">
+    <div class="modal-content">
+        <span id="close-account-modal" class="close-modal">&times;</span>
+        <h3>New Details</h3>
+        <input type="password" id="new-password" placeholder="Set Password">
+        <button id="save-account">Save</button>
+    </div>
+</div>
+
+<div id="key-modal" class="modal">
+    <div class="modal-content">
+        <span id="close-key-modal" class="close-modal">&times;</span>
+        <h3>Enter Password</h3>
+        <input type="password" id="try-password" placeholder="Password">
+        <button id="check-password">Try</button>
+    </div>
+</div>
+	
   <script src="js/script.js"></script>
 </body>
 </html>
-
-
