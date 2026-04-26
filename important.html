@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Important Notes</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<img src="images/screw.png" class="screw top-left">
+    <img src="images/screw.png" class="screw top-right">
+    <img src="images/screw.png" class="screw bottom-left">
+    <img src="images/screw.png" class="screw bottom-right">
+	
+    <main>
+		<button id="back-to-main" class="simple-back-btn" onclick="window.location.href='index.html'">Back to Home</button>
+        <div class="title">
+            My Important Notes
+            <span></span>
+        </div>
+
+        <div class="rounded-box">
+            <div id="todo-app">
+                <textarea id="secret-notes" placeholder="Type your important notes here..." 
+                    style="width: 100%; height: 50vh; background: transparent; border: none; font-family: inherit; font-size: 1.2rem; color: #5a4a1f; outline: none; resize: none;"></textarea>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const noteArea = document.getElementById('secret-notes');
+
+        // Load saved content on startup
+        window.onload = () => {
+            const savedNote = localStorage.getItem("importantNotes");
+            if (savedNote) {
+                noteArea.value = savedNote;
+            }
+        };
+
+        // Save content every time the user types
+        noteArea.oninput = () => {
+            localStorage.setItem("importantNotes", noteArea.value);
+        };
+    </script>
+</body>
+</html>
