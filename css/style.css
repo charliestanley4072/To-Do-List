@@ -10,11 +10,74 @@ body {
 main { padding: 0 10px 40px; }
 
 /* Decorative Elements: Screws & Icons */
-.title img { width: 45px; height: auto; top: 50%; transform: translateY(-50%); }
+.screw { 
+    position: absolute; 
+    width: 40px; 
+    height: 35px; 
+    z-index: -1; 
+    /* This centers them vertically relative to the title bar's height */
+    top: 55px; 
+    transform: translateY(-50%);
+}
 
-/* Corner Pins */
+.calendar-icon, .key-icon, .settings-icon {
+    width: 45px;
+    height: auto;
+    position: absolute;
+    transform: translateY(-50%);
+    z-index: 5;
+}
+
+.calendar-icon {
+    left: 70px;
+    top: 55px;
+}
+
+.key-icon {
+    left: 140px;
+    top: 55px;
+}
+
+.settings-icon {
+    right: 70px;
+    top: 55px;
+}
+
+/* Corner Pins - Adjusting only the top ones to be centered in the bar */
+.top-left      { left: 15px; }
+.top-right     { right: 15px; }
+.bottom-left   { bottom: 15px; left: 15px; top: auto; } /* Reset top for bottom pins */
+.bottom-right  { bottom: 15px; right: 15px; top: auto; }
 
 /* Title + lines */
+.title {
+    width: 100%;
+    text-align: center;
+    padding: 25px 0;
+    font-size: 3rem;
+    margin-top: 30px;
+    font-weight: bold;
+    color: white;
+    position: relative;
+}
+
+/* Center the tick and bin icons vertically in the title bar */
+.icon-left, .icon-right {
+    position: absolute;
+    top: 55px; /* Matches the vertical center of the screws and calendar */
+    transform: translateY(-50%);
+    width: 45px; 
+    height: auto;
+    z-index: 5;
+}
+
+/* Ensure they stay on their respective sides */
+.icon-left {
+    left: 85px; 
+}
+.icon-right {
+    right: 85px;
+}
 
 /* TOP & BOTTOM LINES Shared */
 .title::before, .title::after, .title span::before, .title span::after {
@@ -126,25 +189,28 @@ main { padding: 0 10px 40px; }
     margin-left: 8px;
 }
 
-.clear-btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: #ff4d4d;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    font-weight: bold;
-    z-index: 10;
-    transition: background 0.2s;
+/* While dragging, the original spot looks faint */
+.dragging {
+    opacity: 0.2;
+    background: #d4bc6a !important;
 }
-.clear-btn:hover { background: #cc0000; }
 
-.icon-left { left: 20px; }
-.icon-right { right: 20px; }
+/* Make sure the list behaves as a vertical column in priority mode */
+#task-list.priority-mode {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.priority-mode .task {
+    cursor: move;
+    transition: transform 0.1s ease;
+}
+
+.drag-handle {
+    margin-right: 10px;
+    color: #8a763a;
+}
 
 /* Container Grid */
 .post-it-mode {
@@ -153,7 +219,6 @@ main { padding: 0 10px 40px; }
     gap: 20px;
 }
 
-/* The Square */
 /* The Square */
 .post-it-note {
     aspect-ratio: 1 / 1;
@@ -168,7 +233,6 @@ main { padding: 0 10px 40px; }
     overflow: hidden; /*Cut off reminder if too long*/
     word-break: break-word;
 }
-
 
 .post-it-note span {
     display: -webkit-box;
@@ -223,95 +287,255 @@ main { padding: 0 10px 40px; }
     border-color: transparent !important;
 }
 
-/* While dragging, the original spot looks faint */
-.dragging {
-    opacity: 0.2;
-    background: #d4bc6a !important;
-}
-
-/* Make sure the list behaves as a vertical column in priority mode */
-#task-list.priority-mode {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.priority-mode .task {
-    cursor: move;
-    transition: transform 0.1s ease;
-}
-
-.drag-handle {
-    margin-right: 10px;
-    color: #8a763a;
-}
-
-/* Decorative Elements: Screws & Icons */
-.screw { 
-    position: absolute; 
-    width: 40px; 
-    height: 35px; 
-    z-index: -1; 
-    /* This centers them vertically relative to the title bar's height */
-    top: 55px; 
-    transform: translateY(-50%);
-}
-
-.calendar-icon, .key-icon, .settings-icon {
-    width: 45px;
-    height: auto;
+/* The Button Wrapper */
+#settings-btn {
     position: absolute;
-    transform: translateY(-50%);
-    z-index: 5;
-}
-
-.calendar-icon {
-    left: 70px;
-    top: 55px;
-}
-
-.key-icon {
-    left: 140px;
-    top: 55px;
-}
-
-.settings-icon {
     right: 70px;
     top: 55px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 100; /* Ensure it is on top of everything */
+    padding: 5px;
 }
 
-/* Corner Pins - Adjusting only the top ones to be centered in the bar */
-.top-left     { left: 15px; }
-.top-right    { right: 15px; }
-.bottom-left  { bottom: 15px; left: 15px; top: auto; } /* Reset top for bottom pins */
-.bottom-right { bottom: 15px; right: 15px; top: auto; }
+.settings-icon-img {
+    width: 45px;
+    height: auto;
+    display: block;
+}
 
-/* Title + lines */
-.title {
-    width: 100%;
+/* Sidebar Container */
+.side-panel {
+    height: 100%;
+    width: 300px;
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    right: -300px;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.5s ease-in-out;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+}
+
+.side-panel.open {
+    right: 0; 
+}
+
+/* Typography & Links */
+.side-panel h2, .side-panel label, .side-panel .setting-item {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+    font-family: sans-serif;
+}
+
+
+.side-panel label:hover {
+    color: #f1f1f1;
+}
+
+.closebtn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    
+    /* Resetting button look */
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    
+    /* Styling the X */
+    font-size: 45px;
+    color: #818181;
+    cursor: pointer;
+    line-height: 1; /* Prevents extra height from centering it */
+    
+    /* The Shadow */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+    
+    /* Animation */
+    transition: 0.3s;
+    z-index: 2001;
+}
+
+.closebtn:hover {
+    color: #f1f1f1;
+    text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+/* Adjusting internal items for the dark theme */
+.panel-content {
+    margin-top: 20px;
+}
+
+.danger-btn {
+    margin-left: 32px;
+    width: calc(100% - 64px);
+    background-color: #ff4d4d;
+    border: none;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+/* Centering the Account Label in the Sidebar */
+.centered-label {
     text-align: center;
-    padding: 25px 0;
-    font-size: 3rem;
-    margin-top: 30px;
-    font-weight: bold;
+    width: 100%;
+    padding: 15px 0 !important; /* Overriding previous side-padding */
+    cursor: pointer;
+    display: block;
+}
+
+/* The Popup (Modal) Background */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 3000; /* Higher than sidebar */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    align-items: center;
+    justify-content: center;
+}
+
+/* The Popup Box */
+.modal-content {
+    background-color: #111;
+    padding: 30px;
+    border: 2px solid #818181;
+    border-radius: 15px;
+    width: 300px;
+    text-align: center;
     color: white;
     position: relative;
 }
 
-/* Center the tick and bin icons vertically in the title bar */
-.icon-left, .icon-right {
-    position: absolute;
-    top: 55px; /* Matches the vertical center of the screws and calendar */
-    transform: translateY(-50%);
-    width: 45px; 
-    height: auto;
-    z-index: 5;
+.modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background: #222;
+    color: white;
 }
 
-/* Ensure they stay on their respective sides */
-.icon-left {
-    left: 85px; 
+.modal-content h3 { margin-top: 0; color: #f1f1f1; }
+
+#save-account {
+    background-color: #f1f1f1;
+    color: #111;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
 }
-.icon-right {
-    right: 85px;
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #818181;
+}
+
+/* Overlay Background / Background */
+.panel-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 1999;
+}
+
+/* Overlay Background active / Overlay Background */
+.panel-overlay.active {
+    display: block;
+}
+
+/* The Key Button Wrapper */
+#key-btn {
+    position: absolute;
+    left: 140px;
+    top: 55px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 100; /* Keeps it clickable above the decorative lines */
+    padding: 5px;
+}
+
+.key-icon-img {
+    width: 45px;
+    height: auto;
+    display: block;
+}
+
+/* Clear Button for Completed and Deleted Pages */
+.clear-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #ff4d4d; /* Bright Red */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: bold;
+    transition: background 0.2s, transform 0.1s;
+    z-index: 10;
+}
+
+.clear-btn:hover {
+    background-color: #cc0000; /* Darker Red on hover */
+    transform: scale(1.05);
+}
+
+.clear-btn:active {
+    transform: scale(0.95);
+}
+
+.simple-back-btn {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: #f9e8a6;
+    color: #5a4a1f;
+    border: 2px solid #5a4a1f;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.page-container {
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 80px; /* Space for the button */
 }
