@@ -29,13 +29,13 @@ function loadActiveTasks() {
         makeReminder(newBox, item.text, item.isRed);
         taskList.appendChild(newBox);
     });
-    // Only show the input box if we are NOT in Post-it mode
+    // Only show the input box if NOT in Post-it mode
     if (!isPostIt) addPreset();
     updateHelpVisibility();
 }
 
 function addPreset() {
-    // Safety check: Don't create the typing box if in Post-it mode
+    // Don't create the typing box if in Post-it mode
     if (isPostIt || isPriorityMode) return;
     var row = document.createElement("div");
     row.className = "task";
@@ -48,12 +48,12 @@ function addPreset() {
     typingArea.className = "editable";
     typingArea.contentEditable = true;
     typingArea.innerHTML = "&#8203;"; 
-    typingArea.style.color = "black"; // Ensuring text is black
+    typingArea.style.color = "black"; // Ensures text is black
 
     typingArea.onkeydown = (e) => {
 	if (e.key === "Enter") {
 		e.preventDefault();
-		// This removes the hidden placeholder character and any extra spaces
+		// Removes the hidden placeholder character and any extra spaces
 		var input = typingArea.textContent.replace(/\u200B/g, "").trim();
 		
 		// Only make new preset if there is any text typed
@@ -235,3 +235,79 @@ function updateHelpVisibility() {
 
 document.getElementById("view-toggle-btn").onclick = togglePostItView;
 document.getElementById("priority-mode-toggle").onclick = togglePriorityView;
+
+const settingsBtn = document.getElementById('settings-btn');
+const sidePanel = document.getElementById('side-panel');
+const panelOverlay = document.getElementById('panel-overlay');
+const closePanel = document.getElementById('close-panel');
+
+settingsBtn.onclick = () => {
+    sidePanel.classList.add('open'); // Slides width to 300px
+    panelOverlay.classList.add('active');
+};
+
+const hidePanel = () => {
+    sidePanel.classList.remove('open'); // Slides width back to 0
+    panelOverlay.classList.remove('active');
+};
+
+closePanel.onclick = hidePanel;
+panelOverlay.onclick = hidePanel;
+
+// Selectors
+const accountLabel = document.getElementById('account-label');
+const accountModal = document.getElementById('account-modal');
+const closeAccount = document.getElementById('close-account-modal');
+const saveAccountBtn = document.getElementById('save-account');
+const keyBtn = document.getElementById('key-btn');
+const keyModal = document.getElementById('key-modal');
+const closeKey = document.getElementById('close-key-modal');
+const checkPasswordBtn = document.getElementById('check-password');
+
+// --- Account Logic (Set Password) ---
+accountLabel.onclick = () => {
+    accountModal.style.display = "flex";
+};
+
+closeAccount.onclick = () => {
+    accountModal.style.display = "none";
+};
+
+saveAccountBtn.onclick = () => {
+    const pass = document.getElementById('new-password').value;
+    if (pass) {
+        localStorage.setItem("userPassword", pass);
+        alert("Password saved!");
+        accountModal.style.display = "none";
+        document.getElementById('new-password').value = ""; // Clear input
+    } else {
+        alert("Please enter a password.");
+    }
+};
+
+// --- Key Logic (Check Password) ---
+keyBtn.onclick = () => {
+    keyModal.style.display = "flex";
+};
+
+closeKey.onclick = () => {
+    keyModal.style.display = "none";
+};
+
+checkPasswordBtn.onclick = () => {
+    const entered = document.getElementById('try-password').value;
+    const saved = localStorage.getItem("userPassword");
+    
+    if (entered === saved) {
+        window.location.href = "important.html";
+    } else {
+        alert("Incorrect password!");
+        document.getElementById('try-password').value = "";
+    }
+};
+
+// Global Close (Click outside modal)
+window.onclick = (event) => {
+    if (event.target == accountModal) accountModal.style.display = "none";
+    if (event.target == keyModal) keyModal.style.display = "none";
+};
