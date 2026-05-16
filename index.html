@@ -15,7 +15,26 @@
 	
 <main>
     <div class="title">
-        <img class="calendar-icon" src="images/calendar.png">
+		<div id="calendar-trigger" style="display: inline-block;">
+			<img class="calendar-icon" src="images/calendar.png" alt="Calendar">
+			
+			<div id="calendar-panel" class="side-panel-left">
+				<div class="panel-content">
+					<h2><u>Calendar</u></h2>
+					<div class="setting-item">
+						<button id="schedule-dropdown-btn" class="dropdown-toggle-btn">Schedule</button>
+						<div id="days-dropdown" class="dropdown-container">
+							<a href="monday.html" class="day-link">- Monday <span id="dot-monday" class="status-dot"></span></a>
+							<a href="tuesday.html" class="day-link">- Tuesday <span id="dot-tuesday" class="status-dot"></span></a>
+							<a href="wednesday.html" class="day-link">- Wednesday <span id="dot-wednesday" class="status-dot"></span></a>
+							<a href="thursday.html" class="day-link">- Thursday <span id="dot-thursday" class="status-dot"></span></a>
+							<a href="friday.html" class="day-link">- Friday <span id="dot-friday" class="status-dot"></span></a>
+							<a href="saturday.html" class="day-link">- Saturday <span id="dot-saturday" class="status-dot"></span></a>
+							<a href="sunday.html" class="day-link">- Sunday <span id="dot-sunday" class="status-dot"></span></a>
+						</div>
+					</div>
+				</div>
+			</div>
         
         <button id="settings-btn" class="icon-btn-wrapper">
             <img class="settings-icon-img" src="images/settings.png" alt="Settings">
@@ -24,6 +43,7 @@
         <button id="key-btn" class="key-wrapper">
             <img class="key-icon-img" src="images/key.png" alt="Key">
         </button>
+		</div>
 
         <div id="side-panel" class="side-panel">
             <button id="close-panel" class="closebtn">&times;</button>
