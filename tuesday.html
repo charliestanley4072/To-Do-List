@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel="icon" type="image/x-icon" href="images/favicon.png">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>To-Do List - Tuesday</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<img src="images/screw.png" class="screw top-left">
+    <img src="images/screw.png" class="screw top-right">
+    <img src="images/screw.png" class="screw bottom-left">
+    <img src="images/screw.png" class="screw bottom-right">
+	
+<main>
+    <div class="title">
+        My To-Do List - Tuesday
+        <span></span>
+    </div>
+    
+    <div class="rounded-box">
+        <p id="start-help">Start by clicking to the right of this bullet point!</p>
+        
+        <div class="nav-container">
+            <nav class="nav1">
+                <a href="index.html">Home</a>
+            </nav>
+        </div>
+		
+		<div class="task-input-wrapper">
+            <input type="text" id="task-input" placeholder="Add a new task...">
+            <button id="add-task-btn">Add</button>
+        </div>
+
+        <div id="todo-app">
+            <ul id="task-list"></ul>
+        </div>
+    </div>
+</main>
+
+
+
+	<script>
+        // CONFIGURATION: The unique key name for this day's storage
+        const DAY_STORAGE_KEY = "tasks-tuesday"; 
+
+        const taskInput = document.getElementById('task-input');
+        const addTaskBtn = document.getElementById('add-task-btn');
+        const taskList = document.getElementById('task-list');
+
+        // Load existing items
+        let tasks = JSON.parse(localStorage.getItem(DAY_STORAGE_KEY)) || [];
+
+		function renderTasks() {
+			taskList.innerHTML = "";
+			tasks.forEach((task, index) => {
+				const li = document.createElement('li');
+				li.className = 'task'; // Switched back to your original class name
+				
+				// 1. Text Container
+				const textSpan = document.createElement('span');
+				textSpan.className = 'task-text';
+				textSpan.textContent = task;
+				li.appendChild(textSpan);
+				
+				// 2. Small Delete Button
+				const delBtn = document.createElement('button');
+				delBtn.className = 'task-delete-btn';
+				delBtn.textContent = '×';
+				
+				// The ONLY way to delete: clicking this specific button
+				delBtn.onclick = (event) => {
+					event.stopPropagation(); // Stops the rest of the row from reacting
+					tasks.splice(index, 1);
+					saveAndRender();
+				};
+				
+				li.appendChild(delBtn);
+				taskList.appendChild(li);
+			});
+		}
+
+        function saveAndRender() {
+            localStorage.setItem(DAY_STORAGE_KEY, JSON.stringify(tasks));
+            renderTasks();
+            
+            // If your main script file has a global status dot function, trigger it
+            if (typeof updateCalendarStatusDots === 'function') {
+                updateCalendarStatusDots();
+            }
+        }
+
+        addTaskBtn.onclick = () => {
+            if (taskInput.value.trim() !== "") {
+                tasks.push(taskInput.value.trim());
+                taskInput.value = "";
+                saveAndRender();
+            }
+        };
+
+        // Allow pressing 'Enter' to add tasks easily too
+        taskInput.onkeypress = (e) => {
+            if (e.key === 'Enter') {
+                addTaskBtn.click();
+            }
+        };
+
+        // Initialize display
+        renderTasks();
+    </script>
+</body>
+</html>
