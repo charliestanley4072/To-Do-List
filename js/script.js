@@ -311,3 +311,53 @@ window.onclick = (event) => {
     if (event.target == accountModal) accountModal.style.display = "none";
     if (event.target == keyModal) keyModal.style.display = "none";
 };
+
+const calendarTrigger = document.getElementById('calendar-trigger');
+const calendarPanel = document.getElementById('calendar-panel');
+
+// Open Left Panel on Mouse Hover
+calendarTrigger.onmouseenter = () => {
+    calendarPanel.classList.add('open');
+};
+
+// Close Left Panel when Mouse Leaves the area
+calendarTrigger.onmouseleave = () => {
+    calendarPanel.classList.remove('open');
+};
+
+const scheduleBtn = document.getElementById('schedule-dropdown-btn');
+const daysDropdown = document.getElementById('days-dropdown');
+
+// Toggle the Dropdown Menu within the sidebar
+if (scheduleBtn && daysDropdown) {
+    scheduleBtn.onclick = () => {
+        daysDropdown.classList.toggle('active');
+    };
+}
+
+// Function to check each day's local storage data for active reminders
+function updateCalendarStatusDots() {
+    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    
+    days.forEach(day => {
+        const dot = document.getElementById(`dot-${day}`);
+        if (dot) {
+            const savedTasks = localStorage.getItem(`tasks-${day}`);
+            
+            if (savedTasks) {
+                const tasksArray = JSON.parse(savedTasks);
+                // If the list exists and contains at least one reminder, show the dot
+                if (tasksArray && tasksArray.length > 0) {
+                    dot.classList.add('has-tasks');
+                } else {
+                    dot.classList.remove('has-tasks');
+                }
+            } else {
+                dot.classList.remove('has-tasks');
+            }
+        }
+    });
+}
+
+// Run the check when the page loads up
+window.addEventListener('DOMContentLoaded', updateCalendarStatusDots);
